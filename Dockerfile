@@ -9,11 +9,12 @@
 #docker build -t logsapp .          - добавляем имя образу
 #docker build -t logsapp:version .  - добавляем имя образу и версию(tag)
 #docker images  - показывает все images
-#docker run 'image_id'                          - создаем и запускаем контейнер
-#docker run -p localPort:dockerPort image_id    - создаем и запускаем контейнер, но мапим локальный пор и порт докера.
-#docker run -d -p localPort:dockerPort image_id - тоже самое но в фоновом режиме для терминала.
-#docker run -d -p localPort:dockerPort --name yourName image_id - именуем контейнер
-#docker run -d -p localPort:dockerPort --name yourName --rm image_id - после остановки автоматически удаляется контейнер
+#docker run 'image_id'                                  - создаем и запускаем контейнер
+#docker run -p localPort:dockerPort image_id            - создаем и запускаем контейнер, но мапим локальный пор и порт докера.
+#docker run -d -p localPort:dockerPort image_id         - тоже самое но в фоновом режиме для терминала.
+#docker run -d -p localPort:dockerPort --name yourName image_id                                 - именуем контейнер
+#docker run -d -p localPort:dockerPort --name yourName --rm image_id                            - после остановки автоматически удаляется контейнер
+#docker run -d -p localPort:dockerPort --env-file ./config/.env --name yourName --rm image_id   - читаем локальную переменную
 #docker start 'container_id'    - запускает созданный контейнер
 #docker ps -a                   - посмотреть текущие контейнеры
 #docker ps                      - показывает запущенные контейнеры
