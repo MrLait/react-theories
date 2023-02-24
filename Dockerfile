@@ -4,6 +4,7 @@
 #CMD запускается каждый раз когда запускается сам образ
 #ENV PORT=4200 указываем локальную переменную
 #EXPOSE указываем порт
+#VOLUME добавляем папку которая будет общая для контейнеров. Но обязательно нужно именовать при запуске контейнера
 
 #docker build                       - создаем образ на основе этого файла
 #docker build -t logsapp .          - добавляем имя образу
@@ -15,6 +16,8 @@
 #docker run -d -p localPort:dockerPort --name yourName image_id                                 - именуем контейнер
 #docker run -d -p localPort:dockerPort --name yourName --rm image_id                            - после остановки автоматически удаляется контейнер
 #docker run -d -p localPort:dockerPort --env-file ./config/.env --name yourName --rm image_id   - читаем локальную переменную
+#docker run -d -p 3000:3000 -v logs:/app/data --rm --name logsapp logsapp:volumes               - добавили общий volume
+
 #docker start 'container_id'    - запускает созданный контейнер
 #docker ps -a                   - посмотреть текущие контейнеры
 #docker ps                      - показывает запущенные контейнеры
@@ -26,6 +29,8 @@
 #docker tag oldName newName     - на основе стоарого image, создается новый но с другим именем  т.е переименовываем
 #docker push repoName:tag       - пушим в репозиторий созданный image в dockerHub
 #docker stop                    - останавливаем контейнер
+
+#docker volume ls   - посмотреть все volume
 FROM node
 
 WORKDIR /app
@@ -35,8 +40,10 @@ COPY package.json /app
 RUN npm install
 COPY . .
 
-ENV PORT=4200
+ENV PORT=3000
 
 EXPOSE $PORT
+
+VOLUME [ "/app/data" ]
 
 CMD [ "app.js" ]
