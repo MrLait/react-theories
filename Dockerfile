@@ -25,6 +25,7 @@
 #docker logs                
 #docker tag oldName newName     - на основе стоарого image, создается новый но с другим именем  т.е переименовываем
 #docker push repoName:tag       - пушим в репозиторий созданный image в dockerHub
+#docker stop                    - останавливаем контейнер
 FROM node
 
 WORKDIR /app
