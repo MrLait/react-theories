@@ -17,9 +17,10 @@ FROM node
 
 WORKDIR /app
 
-COPY . .
-
+#оптимизировали для того чтобы добавить кэширование. Теперь не измененные файлы берутся из кэша
+COPY package.json /app
 RUN npm install
+COPY . .
 
 EXPOSE 3000
 
