@@ -1,0 +1,68 @@
+#во вкладке marketplace/actions можно брать уже готовые написаные Actions
+#checkout - action который предоставлен командой github и позволяет получить исходный код на сервере 
+#uses - для использования уже готового action нужно использовать команду uses, а не run
+#npm ci - выполняет тоже что и npm install, но рекомендуется делать npm ci, но обязательно должен присутствовать package-lock
+#needs: 'имя работы' - пзволяет связать работы и запустить их последовательно, а не параллельно
+#paths-ignore: добавить игнорируемый путь
+name: Deploy react app
+on: 
+  push:
+    branches:
+      - master
+    #paths-ignore:
+    # - '.github/workflows/*'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repository code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ hashFiles('**/package-lock.json') }}-primes
+      - name: Install react dependencies
+        run: npm ci
+      - name: Test application
+        run: npm run test
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repository code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3  
+        with:
+          path: ~/.npm
+          key: ${{ hashFiles('**/package-lock.json') }}-primes
+      - name: Install react dependencies
+        run: npm ci
+      - name: Run lint
+        run: npm run lint
+  build:
+    needs: [lint, test]
+    continue-on-error: true
+    strategy:
+      matrix:
+        node-version: [14, 16]
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v3
+      - name: Install NodeJs
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ hashFiles('**/package-lock.json') }}-primes
+      - name: Install react dependencies
+        run: npm ci
+      - name: Build app
+        run: npm run build
+      - name: Deploy
+        run: echo Deploying...
