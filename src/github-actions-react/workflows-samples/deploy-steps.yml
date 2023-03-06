@@ -1,0 +1,23 @@
+#во вкладке marketplace/actions можно брать уже готовые написаные Actions
+#checkout - action который предоставлен командой github и позволяет получить исходный код на сервере 
+#uses - для использования уже готового action нужно использовать команду uses, а не run
+#npm ci - выполняет тоже что и npm install, но рекомендуется делать npm ci, но обязательно должен присутствовать package-lock
+#needs: 'имя работы' - пзволяет связать работы и запустить их последовательно, а не параллельно
+name: Deploy react app
+on: push
+jobs:
+  deploy:
+    runs-on: windows-latest
+    steps:
+      - name: Get the repository code
+        uses: actions/checkout@v3
+      - name: Install react dependencies
+        run: npm ci
+      - name: Test application
+        run: npm run test
+      - name: Run lint
+        run: npm run lint
+      - name: Build app
+        run: npm run build
+      - name: Deploy
+        run: echo Deploying...
