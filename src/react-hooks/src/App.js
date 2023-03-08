@@ -1,64 +1,32 @@
-//useEffect - служит для отслеживания изменения состояния параметра, на который он подписался и выполнить какую-то логику в ответ на это изменение. 
-// В качестве параметра в useEffect() передается функция. При вызове хука useEffect по сути определяется "эффект", который затем применяется в приложении. 
-// Когда именно применяется? По умолчанию React применяет эффект после каждого рендеринга, в том числе при первом рендеринге приложения. Причем поскольку 
-// подобные эффекты определены внутри компонента, они имеют доступ к объекту props и к состоянию компонента.
-
-// чтобы указать, что эффект применяется только при изменении переменной name, передадим ее в качестве необязательного параметра в функцию [name]:
-// Если мы хотим, чтобы эффект вызывался только один раз при самом первом рендеринге, то в качестве параметра передаются пустые квадратные скобки - [].
-// Можно эмулировать life cycle hook, чтобы определить момент, когда компонент готов к работе, а так же очищать ресурсы т.е осуществлять подписку/отписку
-
-import React, { useState, useEffect } from 'react'
+//useRef - позволяет сохранить состояние между рендерингом компонентов и соответственно не вызывает сам рендер
+//Если нам нужно перерисовывать страницу, то нужно использовать хук useState
+// Так же позволяет получать ссылку на дом элементы
+//Позволяет получать значение предыдущего состояния
+import React, { useState, useEffect, useRef } from 'react'
 
 function App() {
-  const [type, setType] = useState('users');
-  const [data, setData] = useState([])
-  const [pos, setPos] = useState({
-    x: 0, y: 0
+  // const [renderCount, setRenderCount] = useState(1)
+  const [value, setValue] = useState('initial')
+  const renderCount = useRef(1)
+  const inputRef = useRef(null)
+  const prevValue = useRef('')
+  useEffect(() => {
+    renderCount.current++;
+    // console.log(inputRef.current.value);
   })
-  // useEffect(() => {
-  //   console.log('render');
-  // })
-
-  // useEffect(() => {
-  //   console.log('Type changed : ', { type });
-  // }, [type])
-
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/${type}`)
-      .then(response => response.json())
-      .then(json => setData(json))
+    prevValue.current = value
+  }, [value])
 
-    return () => {
-      console.log('Clean type');
-    }
-  }, [type])
-
-  const mousemoveHandler = event => {
-    setPos({
-      x: event.clientX,
-      y: event.clientY
-    })
-  }
-
-  useEffect(() => {
-    console.log('ComponentDidMount');
-    // подписка
-    window.addEventListener('mousemove', mousemoveHandler)
-    // отписка
-    return () => {
-      window.removeEventListener('mousemove', mousemoveHandler)
-    }
-  }, [])
-
+  const focus = () => inputRef.current.focus()
   return (
     <div>
-      <h1>Resource: {type}</h1>
-      <button onClick={() => setType('users')}>Users</button>
-      <button onClick={() => setType('todos')}>Todos</button>
-      <button onClick={() => setType('posts')}>Posts</button>
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      <pre>{JSON.stringify(pos, null, 2)}</pre>
-    </div >
+      <h1>Number of render: {renderCount.current} </h1>
+      <h2>Prev value: {prevValue.current} </h2>
+
+      <input ref={inputRef} type="text" onChange={e => setValue(e.target.value)} value={value} />
+      <button className='btn btn-success' onClick={focus}>focus</button>
+    </div>
   )
 }
 
