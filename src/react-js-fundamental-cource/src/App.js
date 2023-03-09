@@ -13,6 +13,7 @@
 // создания управляемого компонента, но так делать нежелательно
 //props.children - почитать
 //e.preventDefault() предотвращает обновление страницы при нажатии на кнопку
+// неуправляемый\неконтролируемый компонент - почитать
 
 import React, { useState, useRef } from 'react'
 import PostItem from './components/PostItem';
@@ -31,7 +32,7 @@ function App() {
   const bodyInputRef = useRef()
   const addNewPost = (e) => {
     e.preventDefault()
-    console.log(bodyInputRef.current);
+    console.log(bodyInputRef.current.value);
   }
   return (
     <div className="App">
@@ -41,12 +42,11 @@ function App() {
           onChange={e => setTitle(e.target.value)}
           type='text'
           placeholder='post name' />
-        <input ref={bodyInputRef} type='text' />
-        {/* <MyInput
+        <MyInput
           ref={bodyInputRef}
           type='text'
           placeholder='post description'
-        /> */}
+        />
         <MyButton onClick={addNewPost}>Create post</MyButton>
       </form>
       <PostList postList={posts} title="title list" />
