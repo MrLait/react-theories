@@ -3,10 +3,11 @@ import { useAlert } from "./AlertContext";
 
 export default function Alert() {
     const alert = useAlert()
-    if (!alert.visible) return null
+    if (!alert.visible)
+        return null
     return (
-        <div className={'alert alert-danger'} onClick={alert.toggle}>
-            It is very important message
+        <div className={'alert alert-danger'} onClick={alert.hide}>
+            {alert.text}
         </div>
     )
 }
