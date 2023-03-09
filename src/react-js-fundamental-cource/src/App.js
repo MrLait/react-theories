@@ -15,6 +15,8 @@
 //e.preventDefault() предотвращает обновление страницы при нажатии на кнопку
 // неуправляемый\неконтролируемый компонент - почитать
 
+//ReactDevTools расширение в хроме
+
 import React, { useState, useRef } from 'react'
 import PostItem from './components/PostItem';
 import PostList from './components/PostList';
