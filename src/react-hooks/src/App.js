@@ -1,18 +1,37 @@
-import React, { useState } from "react";
-import Alert from "./alert/Alert";
-import { AlertProvider } from "./alert/AlertContext";
-import Main from "./Main";
+//useHooks.com
+import React, { useEffect, useState } from "react";
 
-export const AlertContext = React.createContext()
+function useLogger(value) {
+  useEffect(() => {
+    console.log('Value change:', value);
+  }, [value])
+}
+
+function useInput(initialValue) {
+  const [value, setValue] = useState(initialValue)
+
+  const onChange = event => {
+    setValue(event.target.value)
+  }
+
+  const clear = () => setValue('')
+  return {
+    bind: { value, onChange },
+    value,
+    clear
+  }
+}
 
 function App() {
+  const input = useInput('')
+
+  useLogger(input.value);
   return (
-    <AlertProvider>
-      <div className={'container pt-3'}>
-        <Alert />
-        <Main toggle={() => { }} />
-      </div>
-    </AlertProvider>
+    <div>
+      <input type="text" {...input.bind} />
+      <button className="btn btn-warning" onClick={() => input.clear()}> Clear </button>
+      <h1> {input.value}</h1>
+    </div>
   )
 }
 
