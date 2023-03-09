@@ -6,14 +6,18 @@
 
 //Создание компонента 
 //Компонент это функция которая возвращает jsx. Компоненты должны именоваться с большой буквы и их нужно экспортировать
+// классовые компоненты это устаревший подход и лучше использовать функциональные компоненты и хуки
+
 
 import React, { useState } from 'react'
+import ClassCounter from './components/ClassCounter';
 import Counter from './components/Counter';
 
 function App() {
   return (
     <div className="App">
       <Counter />
+      <ClassCounter />
     </div>
   );
 }
