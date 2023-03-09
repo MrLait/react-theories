@@ -9,10 +9,12 @@
 //классовые компоненты это устаревший подход и лучше использовать функциональные компоненты и хуки
 
 // useState предназначен для управления состояния.
+// useRef - позволяет получать напрямую доступ к ДОМ элементу, например что бы получить какое-то поле это второй способ
+// создания управляемого компонента, но так делать нежелательно
 //props.children - почитать
 //e.preventDefault() предотвращает обновление страницы при нажатии на кнопку
 
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import PostItem from './components/PostItem';
 import PostList from './components/PostList';
 import MyButton from './components/UI/button/MyButton';
@@ -26,8 +28,10 @@ function App() {
     { id: 3, title: 'Javascript 3', body: 'Description' }
   ])
   const [title, setTitle] = useState('')
+  const bodyInputRef = useRef()
   const addNewPost = (e) => {
     e.preventDefault()
+    console.log(bodyInputRef.current);
   }
   return (
     <div className="App">
@@ -37,7 +41,12 @@ function App() {
           onChange={e => setTitle(e.target.value)}
           type='text'
           placeholder='post name' />
-        <MyInput type='text' placeholder='post description' />
+        <input ref={bodyInputRef} type='text' />
+        {/* <MyInput
+          ref={bodyInputRef}
+          type='text'
+          placeholder='post description'
+        /> */}
         <MyButton onClick={addNewPost}>Create post</MyButton>
       </form>
       <PostList postList={posts} title="title list" />
