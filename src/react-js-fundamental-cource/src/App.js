@@ -21,14 +21,18 @@
 // к дочернему компоненту, соответственно передача пропсов снизу вверх невозможна. Но из родительского компонента можно передать в дочерний callback
 // функцию обратного вызова. Далее эта функция в дочернем компоненте вызывается и передает данные туда где эта функция была объявлена
 
-//useMemo(callback, dep) - callback должен возвращать результат вычислений. Нужна для кэширования вычислений. Функция пересчитает данные только в том
+//useMemo(callback, deps) - callback должен возвращать результат вычислений. Нужна для кэширования вычислений. Функция пересчитает данные только в том
 // случае если одна из зависимостей изменит сове состояние. Если массив зависимостей пустой, то функция вызовется лишь единожды
+
+//useEffect(callback, deps) - предназначен для жизненного цикла компонента. Работает примерно так же как и useMemo
 
 //stopPropagation предотвращает вызов события - почитать 
 
 //React Transition Group - пакет для анимации 
 //npm i axios  - библиотека что бы делать запросы
-import React, { useMemo, useState } from 'react'
+
+//Жизненный цикл компонента mount, update и unmount https://youtu.be/GNrdg3PzpJQ?t=5921
+import React, { useEffect, useMemo, useState } from 'react'
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
 import PostFilter from './components/PostFilter';
@@ -43,7 +47,9 @@ function App() {
   const [filter, setFilter] = useState({ sort: '', query: '' })
   const [modal, setModal] = useState(false);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-
+  useEffect(() => {
+    fetchPosts()
+  }, [])
   const createPost = (newPost) => {
     setPosts([...posts, newPost])
     setModal(false)
