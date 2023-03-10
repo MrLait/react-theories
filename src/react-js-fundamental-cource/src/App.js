@@ -17,18 +17,21 @@
 
 //ReactDevTools расширение в хроме
 
-
 //props это некоторые параметры которые может принимать компонент из вне, но обмен этими props-ами всегда идет сверху вниз т.е от родителя
 // к дочернему компоненту, соответственно передача пропсов снизу вверх невозможна. Но из родительского компонента можно передать в дочерний callback
 // функцию обратного вызова. Далее эта функция в дочернем компоненте вызывается и передает данные туда где эта функция была объявлена
 
 //useMemo(callback, dep) - callback должен возвращать результат вычислений. Нужна для кэширования вычислений. Функция пересчитает данные только в том
 // случае если одна из зависимостей изменит сове состояние. Если массив зависимостей пустой, то функция вызовется лишь единожды
+
+//stopPropagation предотвращает вызов события - почитать 
 import React, { useMemo, useState } from 'react'
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
 import PostFilter from './components/PostFilter';
 import './styles/App.css'
+import MyModal from './components/UI/myModal/MyModal';
+import MyButton from './components/UI/button/MyButton';
 
 function App() {
   const [posts, setPosts] = useState([
@@ -37,7 +40,7 @@ function App() {
     { id: 3, title: 'Javascript 3', body: 'Description' }
   ])
   const [filter, setFilter] = useState({ sort: '', query: '' })
-
+  const [modal, setModal] = useState(false);
   const sortedPost = useMemo(() => {
     console.log("asd");
     if (filter.sort) {
@@ -52,6 +55,7 @@ function App() {
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost])
+    setModal(false)
   }
   const removePost = (post) => {
     setPosts(posts.filter(p => p.id !== post.id))
@@ -59,7 +63,12 @@ function App() {
 
   return (
     <div className="App">
-      <PostForm create={createPost} />
+      <MyButton style={{ marginTop: 30 }} onClick={() => setModal(true)}>
+        Create user
+      </MyButton>
+      <MyModal visible={modal} setVisible={setModal}>
+        <PostForm create={createPost} />
+      </MyModal>
       <hr style={{ margin: '15px 0' }} />
       <PostFilter filter={filter} setFilter={setFilter} />
       <PostList remove={removePost} postList={sortedAndSearchedPosts} title="title list" />
