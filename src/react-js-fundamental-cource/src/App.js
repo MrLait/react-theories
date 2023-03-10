@@ -21,10 +21,13 @@
 //props это некоторые параметры которые может принимать компонент из вне, но обмен этими props-ами всегда идет сверху вниз т.е от родителя
 // к дочернему компоненту, соответственно передача пропсов снизу вверх невозможна. Но из родительского компонента можно передать в дочерний callback
 // функцию обратного вызова. Далее эта функция в дочернем компоненте вызывается и передает данные туда где эта функция была объявлена
-import React, { useState } from 'react'
+
+//useMemo(callback, dep) - callback должен возвращать результат вычислений. Нужна для кэширования вычислений. Функция пересчитает данные только в том
+// случае если одна из зависимостей изменит сове состояние. Если массив зависимостей пустой, то функция вызовется лишь единожды
+import React, { useMemo, useState } from 'react'
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
-import MySelect from './components/UI/select/MySelect';
+import PostFilter from './components/PostFilter';
 import './styles/App.css'
 
 function App() {
@@ -33,37 +36,33 @@ function App() {
     { id: 2, title: 'Javascript 2', body: 'Description' },
     { id: 3, title: 'Javascript 3', body: 'Description' }
   ])
-  const [selectedSort, setSelectedSort] = useState('')
+  const [filter, setFilter] = useState({ sort: '', query: '' })
+
+  const sortedPost = useMemo(() => {
+    console.log("asd");
+    if (filter.sort) {
+      return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
+    }
+    return posts;
+  }, [filter.sort, posts]);
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPost.filter(post => post.title.toLowerCase().includes(filter.query))
+  }, [filter.query, sortedPost])
+
   const createPost = (newPost) => {
     setPosts([...posts, newPost])
   }
   const removePost = (post) => {
     setPosts(posts.filter(p => p.id !== post.id))
   }
-  const sortPosts = (sort) => {
-    setSelectedSort(sort);
-    setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])))
-  }
+
   return (
     <div className="App">
       <PostForm create={createPost} />
       <hr style={{ margin: '15px 0' }} />
-      <div>
-        <MySelect
-          value={selectedSort}
-          onChange={sortPosts}
-          defaultValue="Sort by"
-          options={[
-            { value: 'title', name: 'By name' },
-            { value: 'body', name: 'By description' }
-          ]} />
-      </div>
-      {
-        posts.length !== 0
-          ? <PostList remove={removePost} postList={posts} title="title list" />
-          : <h1 style={{ textAlign: 'center' }}>Post not found</h1>
-      }
-
+      <PostFilter filter={filter} setFilter={setFilter} />
+      <PostList remove={removePost} postList={sortedAndSearchedPosts} title="title list" />
     </div >
   );
 }
