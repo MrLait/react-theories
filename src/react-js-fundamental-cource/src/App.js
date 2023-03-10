@@ -25,6 +25,8 @@
 // случае если одна из зависимостей изменит сове состояние. Если массив зависимостей пустой, то функция вызовется лишь единожды
 
 //stopPropagation предотвращает вызов события - почитать 
+
+//React Transition Group - пакет для анимации 
 import React, { useMemo, useState } from 'react'
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
