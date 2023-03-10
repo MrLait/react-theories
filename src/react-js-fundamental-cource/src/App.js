@@ -27,6 +27,7 @@
 //stopPropagation предотвращает вызов события - почитать 
 
 //React Transition Group - пакет для анимации 
+//npm i axios  - библиотека что бы делать запросы
 import React, { useMemo, useState } from 'react'
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
@@ -35,13 +36,10 @@ import './styles/App.css'
 import MyModal from './components/UI/myModal/MyModal';
 import MyButton from './components/UI/button/MyButton';
 import { usePosts } from './components/hooks/usePosts';
+import axios from 'axios'
 
 function App() {
-  const [posts, setPosts] = useState([
-    { id: 1, title: 'Javascript', body: 'Description' },
-    { id: 2, title: 'Javascript 2', body: 'Description' },
-    { id: 3, title: 'Javascript 3', body: 'Description' }
-  ])
+  const [posts, setPosts] = useState([])
   const [filter, setFilter] = useState({ sort: '', query: '' })
   const [modal, setModal] = useState(false);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
@@ -50,12 +48,17 @@ function App() {
     setPosts([...posts, newPost])
     setModal(false)
   }
+  async function fetchPosts() {
+    const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
+    setPosts(response.data)
+  }
   const removePost = (post) => {
     setPosts(posts.filter(p => p.id !== post.id))
   }
 
   return (
     <div className="App">
+      <button onClick={fetchPosts}>Get posts</button>
       <MyButton style={{ marginTop: 30 }} onClick={() => setModal(true)}>
         Create user
       </MyButton>
