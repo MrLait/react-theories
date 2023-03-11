@@ -13,6 +13,11 @@ Extensions:
     7) vscode-solution-explorer
     8) NuGet Gallery
     
+    React
+    1) snippets - ES7 React/Redux/GraphQL/React-Native snippets
+    2) auto import - https://stackoverflow.com/questions/60637561/auto-import-of-react-components-in-visual-studio-code
+
+    
     Secondary importance
     1) Backticks - helper for `${}`
     2) CSS Peek
@@ -35,7 +40,6 @@ Hoot key
     ctrl + tab
     ctrl + shift + p
     ctrl + b
-Snipper
 Emmet
 Editor: Word Wrap
     lorem
