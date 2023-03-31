@@ -6,6 +6,7 @@ const PostFilter = ({ filter, setFilter }) => {
     return (
         <div>
             <MyInput
+                // @ts-ignore
                 value={filter.query}
                 onChange={e => setFilter({ ...filter, query: e.target.value })}
                 placeholder="Find..." />
