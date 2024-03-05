@@ -50,3 +50,6 @@ dotnet add targetPrj references sourceProj          - добавляем ссы�
 dotnet add targetPrj package packageName            - добавляем сторонний Nuget пакет Но проще использовать extension NuGet Gallery
 dotnet new sln -n "nameSln"                         - создать solution
 dotnet sln add NameOfLibOne                         - добавить проект в solution   
+dotnet new webapi -o BackOffice.Api                 - создать .net6 
+dotnet new classlib -o StringLibrary                - создать classlib
+dotnet add package MongoDB.Driver                   - добавить mongoDB
