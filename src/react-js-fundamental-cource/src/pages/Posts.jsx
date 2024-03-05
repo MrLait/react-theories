@@ -47,8 +47,7 @@ const Posts = () => {
     }
     return (
         <div className="App">
-            <button
-                onClick={fetchPosts}>Get posts</button>
+            <button onClick={fetchPosts}>Get posts</button>
             <MyButton style={{ marginTop: 30 }} onClick={() => setModal(true)}>
                 Create user
             </MyButton>
