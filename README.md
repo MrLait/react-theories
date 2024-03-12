@@ -15,15 +15,17 @@
     - [Остановка образа:](#остановка-образа)
   - [Как изменить image и на его основе создать новый? Dev режим](#как-изменить-image-и-на-его-основе-создать-новый-dev-режим)
   - [Deploy в DockerHub](#deploy-в-dockerhub)
+  - [Docker Compose](#docker-compose)
   - [docker остальные команды:](#docker-остальные-команды)
-- [Материалы:](#материалы)
+- [Errors](#errors)
+- [Materials:](#materials)
 
 <!-- /TOC -->
 
 # react-theories
 # docker theories:
 ## Установка и запуск: 
-1. [Install Docker Desktop on Windows]([https://](https://docs.docker.com/desktop/install/windows-install/))
+1. [Install Docker Desktop on Windows](https://docs.docker.com/desktop/install/windows-install/)
 2. Restart PC
 3. Fix errors: Docker Desktop for Windows: No hypervisor is present on this system 
    1. open power shell as admin: 
@@ -54,12 +56,14 @@ Docker hub - это что-то вроде такого github только в �
 
 Dockerfile - файл в котором описываем инструкции, чтобы создать на его основе image
 
-1. FROM node - когда docker будет считывать эту строчку он сначала поищет этот image на локальном компе, если его нет, то скачает с docker hub
-2. COPY - копирует файлы и папки проекта в image
-3. COPY . - копирует все из корня проекта в image
-4. WORKDIR /app - 
-5. COPY . ./app - копирует все в указанный WORKDIR из корня проекта в image
-6. COPY . . - означают взять из корневого каталога где лежит Dockerfile и положить в папку WORKDIR
+1. FROM node - когда docker будет считывать эту строчку он сначала поищет этот image на локальном компе, если его нет, то скачает с docker hub1. 
+2. FROM node:20.11.0 - тоже самое, но с версией. Чтобы узнать свою версию:
+   1. node -v
+3. COPY - копирует файлы и папки проекта в image
+4. COPY . - копирует все из корня проекта в image
+5. WORKDIR /app - 
+6. COPY . ./app - копирует все в указанный WORKDIR из корня проекта в image
+7. COPY . . - означают взять из корневого каталога где лежит Dockerfile и положить в папку WORKDIR
 
 Далее идут команды для работы приложения
 1. RUN запускается когда собираем строим сам образ
@@ -86,9 +90,10 @@ VOLUME добавляем папку которая будет общая для
 
 ## Как построить и запустить образ и подключиться который запущен в фоновом режиме?
 ### Команды, чтобы построить образ:
-1. docker build . - создаем образ на основе этого Dockerfile
-2. docker build -t imageName .  - добавляем имя образу
-3. docker build -t imageName:version .   - добавляем имя образу и версию(tag)
+1. docker build .                         - создаем образ на основе этого Dockerfile
+2. docker build -t imageName .            - добавляем имя образу
+3. docker build -t imageName:version .    - добавляем имя образу и версию(tag)
+4. docker rmi image_id                    - удаляем созданный image
 
 ### Команды для запуска образа: 
 1. docker run 'image_id'         - создаем и запускаем контейнер
@@ -120,6 +125,16 @@ VOLUME добавляем папку которая будет общая для
 4. docker pull repoName:tag - вытаскиваем созданный image из dockerHub
 5. docker run -d -p localPort:dockerPort --name yourName --rm repoName:tag - запускаем скаченный image
 
+## Docker Compose
+1. docker-compose up -d
+2. docker-compose -f docker-compose.yml up -d
+3. docker-compose ps
+4. docker-compose logs mysql  - посмотреть логи
+5. docker-compose down        - остановить и удалить
+6. docker-compose stop        - остановить контейнеры
+7. docker-compose restart     - Перезапускает все остановленные и запущенные сервисы
+8. docker image prune         - удаляем все созданные images
+
 ## docker остальные команды:
 1. docker images  - показывает все images
 2. docker ps -a                   - посмотреть текущие контейнеры
@@ -127,11 +142,34 @@ VOLUME добавляем папку которая будет общая для
 4. docker container prune         - удаляем все созданные контейнеры
 5. docker image prune             - удаляем все созданные images
 6. docker rmi image_id            - удаляем созданный image
-7. docker tag oldName newName     - на основе стоарого image, создается новый но с другим именем  т.е переименовываем
+7. docker tag oldName newName     - на основе старого image, создается новый но с другим именем  т.е переименовываем
 8. docker volume ls   - посмотреть все volume
-   
-# Материалы:
+
+
+# Errors
+1. Error response from daemon: Get "https://registry-1.docker.io/v2/": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+   1. "docker logout" and login again
+
+
+# Materials:
 1. Docker для Начинающих - Полный Курс - [клик](https://www.youtube.com/watch?v=n9uCgUzfeRQ&ab_channel=%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BB%D0%B5%D0%BD%D0%9C%D0%B8%D0%BD%D0%B8%D0%BD)
 2. .Net Core MySQL Microservice - Entity Framework Core MySQL - [клик](https://www.youtube.com/watch?v=b1BSu0Wb2Rw&ab_channel=CodingDroplets)
 3. .NET Docker Tutorial - SQL Server Docker [.NET Docker] - [клик](https://www.youtube.com/watch?v=hpLvXNASyTI&ab_channel=CodingDroplets)
 4. Как запустить проект? ASP.NET Core + React + NGINX + Docker Compose - [клик](https://www.youtube.com/watch?v=PhF6PxDT8Mo&ab_channel=%D0%A0%D1%83%D1%81%D0%BB%D0%B0%D0%BD%D0%93%D0%B0%D0%BB%D0%B5%D0%B5%D0%B2)
+
+
+
+
+docker-compose  -f docker-compose.yml -f docker-compose.override.yml -p dockercompose7745684968658963480 --ansi never build --build-arg BUILD_CONFIGURATION=Release
+
+
+docker-compose  -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\docker-compose.yml" -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\docker-compose.override.yml" -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose7745684968658963480 --ansi never up -d
+
+1> docker-compose  -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\docker-compose.yml" -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\docker-compose.override.yml" -p dockercompose7745684968658963480 --ansi never build --build-arg BUILD_CONFIGURATION=Release
+
+3>docker-compose  -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\docker-compose.yml" -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\docker-compose.override.yml" -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\obj\Docker\docker-compose.vs.release.g.yml" -p dockercompose7745684968658963480 --ansi never --profile "*" config
+3>name: dockercompose7745684968658963480
+
+
+docker-compose  -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\docker-compose.yml" -f "E:\VS\GitHub\.NetProjects\UniversityBookShop\docker-compose.override.yml" -p dockercompose7745684968658963480 --ansi never build --build-arg BUILD_CONFIGURATION=Release
+1>2024/03/10 23:26:20 http2: server: error reading preface from client //./pipe/docker_engine: file has already been closed
